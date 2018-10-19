@@ -1,0 +1,10 @@
+{
+  "name": "strikepro-mock-server",
+  "version": "1.0.0",
+  "description": "Strikepro project API mock server.",
+  "main": "server.js",
+  "repository": "https://github.com/ragmon/strikepro-mock-server.git",
+  "author": "Arthur Ragimov <ragimov.artyr@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
