@@ -1,38 +1,50 @@
+const Faker = require('faker');
+const dateFormat = require('dateformat');
+const path = require('path');
+
 const express = require('express');
 const app = express();
 const port = 3000;
 
+const dateTimeMask = 'dd.mm.yyyy';
+
 /*
     Data generators
  */
-function makeCategoryList() {
-    return [
-        {
-            id : 1,
-            name : "News"
-        },
-        {
-            id : 2,
-            name : "Features"
-        },
-        {
-            id : 3,
-            name : "Other"
-        }
-    ];
+function makeCategory(id) {
+    return {
+        id : id,
+        name : Faker.lorem.word()
+    };
+}
+function makeCategoryList(count) {
+    if (!count) count = 3;
+    const categories = [];
+    for (let i = 1; i <= count; i++) {
+        categories.push(makeCategory(i));
+    }
+    return categories;
+}
+function makeTagList(count) {
+    if (!count) count = 3;
+    const tags = [];
+    for (let i = 1; i <= count; i++) {
+        tags.push(Faker.lorem.word());
+    }
+    return tags;
 }
 function makePost(postId, categoryIDs) {
     return {
         id : postId,
-        category_id : categoryIDs ? categoryIDs[Math.floor(Math.random() * categoryIDs.length)] : null,
-        title : `Title ${postId}`,
-        excerpt : `Excerpt ${postId}`,
-        body : `Body ${postId}`,
-        tags : ['tag1', 'tag2', 'tag3'].join(' '),
-        image : `https://picsum.photos/200/300?${postId}`,
-        public_at : '01.03.2017',
-        created_at : '06.06.2016',
-        updated_at : '09.06.2016'
+        category_id : Faker.helpers.randomize(categoryIDs),
+        title : Faker.lorem.words(),
+        excerpt : Faker.lorem.sentence(),
+        body : Faker.lorem.paragraphs(3, '<br>'),
+        tags : makeTagList().join(' '),
+        image : Faker.image.imageUrl(200, 300),
+        public_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask),
+        created_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask),
+        updated_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask)
     };
 }
 function makePostList(pageNum, perPage, categoryID) {
@@ -56,14 +68,14 @@ function makeGroup(groupID) {
         manufacturer_id : 1,
         seasonality_id : 1,
         type_id : 1,
-        'new' : Math.random() >= 0.5,
-        sale : Math.random() >= 0.5,
+        'new' : Faker.random.boolean(),
+        sale : Faker.random.boolean(),
         code : Math.floor(Math.random() * 999999),
-        name : `Name ${groupID}`,
-        fullname : `Full name ${groupID}`,
-        description : `Description ${groupID}`,
-        created_at : '06.06.2016',
-        updated_at : '09.06.2016'
+        name : Faker.lorem.words(),
+        fullname : Faker.lorem.words(),
+        description : Faker.lorem.paragraphs(3, '<br>'),
+        created_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask),
+        updated_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask)
     };
 }
 function makeGroupList(pageNum, perPage) {
@@ -78,15 +90,15 @@ function makeGroupList(pageNum, perPage) {
 function makeArticle(articleID, groupID) {
     return {
         id : articleID,
-        group_id : groupID ? groupID : (Math.random() >= 0.5 ? Math.floor(Math.random() * 999999) : null),
-        'new' : Math.random() >= 0.5,
-        sale : Math.random() >= 0.5,
+        group_id : groupID ? groupID : Faker.random.number(),//groupID ? groupID : (Math.random() >= 0.5 ? Math.floor(Math.random() * 999999) : null),
+        'new' : Faker.random.boolean(),
+        sale : Faker.random.boolean(),
         code : Math.floor(Math.random() * 999999),
-        name : `Name ${articleID}`,
-        fullname : `Full name ${articleID}`,
-        in_stock : Math.random() >= 0.5,
-        created_at : '06.06.2016',
-        updated_at : '09.06.2016'
+        name : Faker.lorem.words(),
+        fullname : Faker.lorem.words(),
+        in_stock : Faker.random.boolean(),
+        created_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask),
+        updated_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask)
     };
 }
 function makeArticleList(pageNum, perPage, groupID) {
@@ -107,8 +119,8 @@ function makeCityList() {
             name : 'Kiev',
             lng : 50.454677,
             lat : 30.542362,
-            created_at : '01.01.2017',
-            updated_at : '01.03.2017'
+            created_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask),
+            updated_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask)
         },
         {
             id : 2,
@@ -116,8 +128,8 @@ function makeCityList() {
             name : 'Odessa',
             lng : 46.477076,
             lat : 30.729940,
-            created_at : '01.01.2017',
-            updated_at : '01.03.2017'
+            created_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask),
+            updated_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask)
         },
         {
             id : 3,
@@ -125,20 +137,20 @@ function makeCityList() {
             name : 'Harkov',
             lng : 49.991658,
             lat : 36.280565,
-            created_at : '01.01.2017',
-            updated_at : '01.03.2017'
+            created_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask),
+            updated_at : dateFormat(Faker.date.between('01/01/2017', '01/01/2018'), dateTimeMask)
         }
     ];
 }
 function makeStore(storeID, citiesIDs) {
     return {
         id : storeID,
-        name : `Store ${storeID}`,
-        address : `Address ${storeID}`,
-        site_url : `http://example.com?${storeID}`,
-        telephone : `+46453763${storeID}`,
-        order : Math.floor(Math.random()),
-        city_id : citiesIDs[Math.floor(Math.random() * citiesIDs.length)]
+        name : Faker.lorem.words(),
+        address : Faker.address.streetAddress(),
+        site_url : Faker.internet.url(),
+        telephone : Faker.phone.phoneNumber(),
+        order : Faker.random.number(),
+        city_id : citiesIDs[Faker.random.number(citiesIDs.length)]
     };
 }
 function makeStoreList(pageNum, perPage) {
@@ -235,6 +247,10 @@ app.get('/api/v1/city/:cityID/stores', (req, res) => {
  */
 
 // TODO: release feedback routes
+
+
+// Static directory
+app.use('/', express.static(path.join(__dirname, 'public')));
 
 
 app.listen(port, () => console.log(`Strikepro mock-server app listening on port ${port}!`));
