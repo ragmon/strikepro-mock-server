@@ -296,6 +296,7 @@ function makeSeasonality(id) {
     };
 }
 function makeSeasonalityList(count) {
+    count = count || 5;
     const seasonalities = [];
     for (let i = 1; i <= count; i++) {
         seasonalities.push(makeSeasonality(i));
