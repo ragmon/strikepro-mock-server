@@ -1,6 +1,6 @@
 {
   "name": "strikepro-mock-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Strikepro project API mock server.",
   "main": "server.js",
   "repository": "https://github.com/ragmon/strikepro-mock-server.git",
